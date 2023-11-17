@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+<androidx.viewpager.widget.ViewPager
+    android:id="@+id/viewpageer"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_above="@+id/tab"/>
+
+    <RadioGroup
+        android:layout_height="55dp"
+        android:layout_width="fill_parent"
+        android:id="@+id/tab"
+        android:gravity="center_vertical"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/home_button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:button="@null"
+            android:checked="true"
+            android:drawableTop="@drawable/home"
+            android:gravity="center"
+            android:paddingLeft="0dp"
+            android:text="Home"/>
+
+        <RadioButton
+            android:id="@+id/page1_button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:button="@null"
+            android:checked="true"
+            android:drawableTop="@drawable/page1"
+            android:gravity="center"
+            android:paddingLeft="0dp"
+            android:text="Page1"/>
+
+        <RadioButton
+            android:id="@+id/page2_button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:button="@null"
+            android:checked="true"
+            android:drawableTop="@drawable/page2"
+            android:gravity="center"
+            android:paddingLeft="0dp"
+            android:text="Page2"/>
+
+        <RadioButton
+            android:id="@+id/my_button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:button="@null"
+            android:checked="true"
+            android:drawableTop="@drawable/my"
+            android:gravity="center"
+            android:paddingLeft="0dp"
+            android:text="My"/>
+    </RadioGroup>
+</RelativeLayout>

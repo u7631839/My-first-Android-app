@@ -1,0 +1,773 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+@startuml
+
+
+
+class User {
+    - registerTime: long
+    - password: String
+    - email: String
+    - uid: String
+    - lat: double
+    - lon: double
+    - lauchGoods: List<Good>
+    - cartList: List<Cart>
+    + getLon(): double
+    + getLat(): double
+    + getRegisterTime(): long
+    + setCartList(cartList: List<Cart>)
+    + getCartList(): List<Cart>
+    + getLauchGoods(): List<Good>
+    + setLat(lat: double)
+    + setLon(lon: double)
+    + setLauchGoods(lauchGoods: List<Good>)
+    + addGood(good: Good)
+    + getUid(): String
+    + getPassword(): String
+    + setPassword(password: String)
+    + getEmail(): String
+    + setEmail(email: String)
+    + setRegisterTime(registerTime: long)
+    + setUid(uid: String)
+    + compareTo(user: User): int
+}
+class Good {
+    - uid: String
+    - cate: List<String>
+    - name: String
+    - category: String
+    - price: Double
+    - registerTime: long
+    - isDelete: int
+    - clicks: Integer
+    - brand: String
+    - supermarketid: Integer
+    - imageResources: int
+    - isSwiped: boolean
+    - lon: double
+    - lat: double
+    - gid: String
+
+    + setUid(uid: String): void
+    + setLon(lon: double): void
+    + setLat(lat: double): void
+    + getUid(): String
+    + getRegisterTime(): long
+    + setRegisterTime(registerTime: long): void
+    + getLon(): double
+    + getLat(): double
+    + Good(uid: String, name: String, category: String, price: Double, registerTime: long, isDelete: int, clicks: Integer, brand: String, gid: String, lon: double, lat: double): void
+    + getIsDelete(): int
+    + setIsDelete(isDelete: int): void
+    + getCate(): List<String>
+    + setCate(cate: List<String>): void
+    + getName(): String
+    + setName(name: String): void
+    + compareTo(good: Good): int
+    + getGid(): String
+    + setGid(gid: String): void
+    + getCategory(): String
+    + setCategory(category: String): void
+    + getPrice(): Double
+    + setPrice(price: Double): void
+    + getClicks(): Integer
+    + setClicks(clicks: Integer): void
+    + getBrand(): String
+    + setBrand(brand: String): void
+    + getSupermarketid(): Integer
+    + setSupermarketid(supermarketid: Integer): void
+    + getImageResources(): int
+    + setImageResources(imageResources: int): void
+    + setSwiped(swiped: boolean): void
+    + isSwiped(): boolean
+    + toString(): String
+}
+
+class Cart {
+    - categoryui: String
+    - goodModelList: List<Good>
+
+    + Cart(categoryui: String, goodModelList: List<Good>): void
+    + Cart(): void
+    + getCategoryui(): String
+    + setCategoryui(categoryui: String): void
+    + getGoodModelList(): List<Good>
+    + setGoodModelList(goodModelList: List<Good>): void
+    + addGoodtoCart(good: Good): void
+}
+
+User "1" --> "*" Good: lauchGoods
+User "1" --> "*" Cart: cartList
+Cart "1" --> "*" Good: contains
+
+class MainActivity {
+    - txt_topbar: TextView
+    - tab: RadioGroup
+    - home_button: RadioButton
+    - page1_button: RadioButton
+    - page2_button: RadioButton
+    - my_button: RadioButton
+    - viewpageer: ViewPager
+    - mAdapter: MyFragmentPagerAdapter
+    - static final PAGE_ONE: int = 0
+    - static final PAGE_TWO: int = 1
+    - static final PAGE_THREE: int = 2
+    - static final PAGE_FOUR: int = 3
+    - static final REQUEST_LOCATION_PERMISSION_CODE: int = 1
+    - static mDatabase: DatabaseController = DatabaseController.getInstance()
+
+    + onCreate(savedInstanceState: Bundle): void
+    - bindViews(): void
+    + onCheckedChanged(group: RadioGroup, checkedId: int): void
+    + onPageScrolled(position: int, positionOffset: float, positionOffsetPixels: int): void
+    + onPageSelected(position: int): void
+    + onPageScrollStateChanged(state: int): void
+    - requestLocationPermission(): void
+    + onRequestPermissionsResult(requestCode: int, permissions: String[], grantResults: int[]): void
+    - getLocation(): void
+}
+MainActivity --> MyFragmentPagerAdapter: Uses
+MainActivity --> DatabaseController: Uses
+class MyFragmentPagerAdapter{
+    - PAGER_COUNT: int = 4
+    - homePage: HomePage
+    - page1_Fragment: page1Fragment
+    - page2_Fragment: page2Fragment
+    - loginFragment: LoginFragment
+    - myFragment: MyFragment
+
+    + MyFragmentPagerAdapter(fm: FragmentManager)
+    + getCount(): int
+    + instantiateItem(vg: ViewGroup, position: int): Object
+    + destroyItem(container: ViewGroup, position: int, object: Object): void
+    + getItem(position: int): Fragment
+}
+MyFragmentPagerAdapter --> HomePage: Uses
+MyFragmentPagerAdapter --> page1Fragment: Uses
+MyFragmentPagerAdapter --> page2Fragment: Uses
+MyFragmentPagerAdapter --> LoginFragment: Uses
+MyFragmentPagerAdapter -down-> MyFragment: Uses
+
+class HomePage{
+    - view: View
+    - recyclerView: RecyclerView
+    - myAdapter: MyAdapter
+    - goodAVLtree: AVLCateTree
+
+    + onCreateView(inflater, container, savedInstanceState): View
+    - goToNextActivity(): void
+    - generateProductList(c: String): List<Good>
+    + addGoodIntoCart(originUser: User, good: Good): void
+}
+
+
+class page1Fragment{
+    - static expandableListView: ExpandableListView
+    - static cartgood: List<Cart>
+    - static cartAdapter: CartAdapter
+    + onCreateView(inflater, container, savedInstanceState): View
+    + static initgoodlist(): void
+    + static initExpandableListView(): void
+    + static initExpandableListViewData(cartgood: List<Cart>): void
+}
+class MyAdapter{
+    - dataGoodList: List<Good>
+    - context: Context
+
+    + MyAdapter(context: Context, dataGoodList: List<Good>)
+    + onCreateViewHolder(parent: ViewGroup, viewType: int): ViewHolder
+    + onBindViewHolder(holder: ViewHolder, position: int): void
+    + getItemCount(): int
+    + updateData(newDataList: List<Good>): void
+}
+MyAdapter --> Good : uses
+class AVLCateTree {
+    - root: AVLCateNode
+    - nodes: List<AVLCateNode>
+    + AVLCateTree()
+    + add(node: AVLCateNode): void
+    + search(category: String): AVLCateNode
+    + searchParent(category: String): AVLCateNode
+    + delNode(value: String): void
+    - delMin(node: AVLCateNode): AVLCateNode
+    + getAllGoods(): List<Good>
+    - inorderTraversal(node: AVLCateNode, goods: List<Good>): void
+    + getAllNodes(): List<AVLCateNode>
+    - inorderTraversalForNodes(node: AVLCateNode, nodesList: List<AVLCateNode>): void
+}
+
+class AVLCateNode {
+    - value: String
+    - goodList: List<Good>
+    - leftN: AVLCateNode
+    - rightN: AVLCateNode
+    + AVLCateNode(value: String)
+    + add(node: AVLCateNode): void
+    + search(category: String): AVLCateNode
+    + searchParent(category: String): AVLCateNode
+}
+
+
+AVLCateTree --> AVLCateNode: has a >
+AVLCateNode o-- Good: contains multiple >
+class DatabaseController {
+    - instance: DatabaseController {static}
+    - db: FirebaseDatabase {static}
+    - reference: DatabaseReference {static}
+
+    - DatabaseController()
+    + getInstance(): DatabaseController {static}
+    + addAdaLovelace(email: String, password: String, uid: String): void
+    + setUser(user: User): void
+    + addGood(good: Good): void
+    + sendMessage(message: Message): void
+}
+
+
+
+class Message {
+    - content: String
+    - senderID: String
+    - receiverID: String
+    - message_time: long
+
+    + Message(content: String, getSenderID: String, receiverID: String)
+    + Message()
+
+    + getContent(): String
+    + getSenderID(): String
+    + getReceiverID(): String
+    + getMessage_time(): long
+
+    + setContent(content: String): void
+    + setSenderID(senderID: String): void
+    + setReceiverID(receiverID: String): void
+}
+
+DatabaseController --> User: uses >
+DatabaseController --> Good: uses >
+DatabaseController --> Message: uses >
+DatabaseController --> Cart: uses >
+
+class MyApplication {
+    - userType : String
+    - goodType : String
+    - message_update_time : long
+    - good_update_time : long
+    - user_update_time : long
+    - cateGood1 : HashMap<String,List<Good>>
+    - {static} userTree : AVLUserTree
+    - {static} goodAVLtree : AVLCateTree
+    - fileInputStream : FileInputStream
+    - fileInputStream1 : FileInputStream
+    - {static} my_lat : double
+    - {static} my_lon : double
+    - context : Context
+    - factory : JSONToAVLTreeConverterFactory
+
+    + onCreate() : void
+    - readTimes(fileName : String) : String[]
+    - write(fileName : String, m_t : String, g_t : String, u_t : String) : void
+    - initializeUserTree() : boolean
+    - initializeGoodsTree() : boolean
+}
+
+class AVLUserTree {
+    - root: AVLUserNode
+    + AVLUserTree()
+    + add(node: AVLUserNode): void
+    + search(value: User): AVLUserNode
+    + searchByID(uid: String): AVLUserNode
+    + searchParent(value: User): AVLUserNode
+    + delNode(value: User): void
+    - delMin(node: AVLUserNode): AVLUserNode
+    + changeNodeValue(user: User, newUser: User): void
+}
+
+class AVLUserNode {
+    - value: User
+    - leftN: AVLUserNode
+    - rightN: AVLUserNode
+    + AVLUserNode(value: User)
+    + add(node: AVLUserNode): void
+    + search(value: User): AVLUserNode
+    + searchByID(uid: String): AVLUserNode
+    + searchParent(value: User): AVLUserNode
+}
+
+
+AVLUserTree --> AVLUserNode: has a >
+AVLUserNode o-- User: contains >
+
+class JSONToAVLTreeConverterFactory<T extends Comparable<T>> {
+
+    + getInstance() : JSONToAVLTreeConverterFactory
+    + init(AVLUserTree, AVLCateTree, String, FileInputStream, FileInputStream) : AVLMainTree
+    + convertUserJsonToAVLTree(AVLUserTree, FileInputStream) : AVLUserTree
+    + getLauchGoodsListFromJson(JSONArray) : List<Good>
+    + getCartListFromJson(JSONArray) : List<Cart>
+    + firstConvertUserJsonToAVLTree(AVLUserTree, User) : AVLUserTree
+    + convertGoodJsonToAVLTree(AVLCateTree, FileInputStream) : AVLCateTree
+
+    - cateGood : HashMap<String, List<Good>>
+    - cateGood1 : HashMap<String, List<Good>>
+    - instance : JSONToAVLTreeConverterFactory {static}
+
+    JSONToAVLTreeConverterFactory ..> Good : uses
+    JSONToAVLTreeConverterFactory ..> User : uses
+    JSONToAVLTreeConverterFactory ..> Cart : uses
+    JSONToAVLTreeConverterFactory ..> AVLUserTree : uses
+    JSONToAVLTreeConverterFactory ..> AVLCateTree : uses
+    JSONToAVLTreeConverterFactory ..> AVLUserNode : uses
+    JSONToAVLTreeConverterFactory ..> AVLMainTree : uses
+    JSONToAVLTreeConverterFactory ..> AVLCateNode : uses
+}
+
+note top of JSONToAVLTreeConverterFactory : Singleton Pattern
+
+MyApplication --> Good
+MyApplication --> AVLUserTree
+MyApplication --> AVLCateTree
+MyApplication --> JSONToAVLTreeConverterFactory
+
+
+HomePage --> MyAdapter : uses
+
+HomePage --> AVLCateTree : uses
+HomePage --> Good : uses
+HomePage --> User : uses
+HomePage --> DatabaseController : uses
+HomePage --> MyApplication : uses
+
+
+
+class CartAdapter{
+    - context: Context
+    - cartgood: List<Cart>
+    + CartAdapter(context: Context)
+    + setData(cartgood: List<Cart>): void
+    + getGroupCount(): int
+    + getGroup(groupPosition: int): Object
+    + getGroupId(groupPosition: int): long
+    + getGroupView(groupPosition, isExpanded, convertView, parent): View
+    + getChildrenCount(groupPosition: int): int
+    + getChild(groupPosition, childPosition): Object
+    + getChildId(groupPosition, childPosition): long
+    + getChildView(groupPosition, childPosition, isLastChild, convertView, parent): View
+    + isChildSelectable(groupPosition, childPosition): boolean
+    + hasStableIds(): boolean
+}
+
+CartAdapter --> Cart : uses
+CartAdapter --> Good : uses
+
+
+
+page1Fragment --> CartAdapter : uses
+page1Fragment --> Cart : uses
+
+@enduml
+
+class page2Fragment{
+    - adapter: ContactsAdapter
+    - recyclerView: RecyclerView
+    - latestTime: String
+    - databaseReference: DatabaseReference
+    + onCreateView(inflater: LayoutInflater, container: ViewGroup, savedInstanceState: Bundle): View
+}
+class ContactsAdapter{
+    - contacts: List<Message>
+    - receiverId: String
+    - timeStampStr: String
+    - interactor: Interactor
+    - loginUser: User
+    + ContactsAdapter(interactor: Interactor)
+    + onCreateViewHolder(parent: ViewGroup, viewType: int): ContactListHolder
+    + onBindViewHolder(holder: ContactListHolder, position: int): void
+    + getItemCount(): int
+    + setContacts(contacts: List<Message>): void
+    + addContact(contact: Message): void
+    + deleteContact(position: int): void
+}
+
+
+class ContactListHolder {
+    ...
+}
+
+class Message {
+    ...
+}
+
+ContactsAdapter --> Message : uses
+ContactsAdapter --> ContactListHolder : uses
+ContactsAdapter --> User : uses
+ContactsAdapter --> ContactsAdapter.Interactor : implements
+
+class LoginFragment{
+    - mAuth: FirebaseAuth
+    - email: EditText
+    - password: EditText
+    - rootView: View
+    + LoginFragment()
+    + onCreate(savedInstanceState: Bundle): void
+    + onCreateView(inflater: LayoutInflater, container: ViewGroup, savedInstanceState: Bundle): View
+    + onStart(): void
+    - goToRegistration(): void
+    - loginEvent(): void
+    - updateUI(user: FirebaseUser): void
+    - findUserFromTree(user: FirebaseUser): com.example.myapplication.entity.User
+}
+
+class MyFragment{
+    - useremail: TextView
+    - logOut: TextView
+    - goodsButton: Button
+    - add_button: Button
+
+    + onCreateView(inflater: LayoutInflater, container: ViewGroup, savedInstanceState: Bundle): View
+    + onResume(): void
+    + setUser(user: User): void
+}
+MyFragment --> User : uses
+
+MyFragmentPagerAdapter --> FragmentPagerAdapter : extends
+MyFragmentPagerAdapter --> FragmentManager : uses
+MyFragmentPagerAdapter --> HomePage : creates & uses
+MyFragmentPagerAdapter --> page1Fragment : creates & uses
+MyFragmentPagerAdapter --> page2Fragment : creates & uses
+MyFragmentPagerAdapter --> LoginFragment : creates & uses
+MyFragmentPagerAdapter --> MyFragment : creates & uses
+
+class DatabaseController {
+    ...
+}
+
+MainActivity --> MyFragmentPagerAdapter : uses
+MainActivity --> DatabaseController : uses
+
+class addGoods extends AppCompatActivity {
+
+    - goodAVLtree: AVLCateTree
+    - avlUserTreeAVLtree: AVLUserTree
+    - loginUser: User
+
+    + onCreate(savedInstanceState: Bundle): void
+    + insert(eachGood: Good): void
+    + onOptionsItemSelected(item: MenuItem): boolean
+}
+
+class ChatActivity extends AppCompatActivity {
+
+    - message: EditText
+    - recyclerView: RecyclerView
+    - send: Button
+    - adapter: ChatAdapter
+    - time: String
+    - messageList: List<Message>
+    - receiverId: String
+    - senderId: String
+    - content: String
+
+    + onBackPressed(): void
+    + onCreate(savedInstanceState: Bundle): void
+    - getData(receiverIdS: String): List<Message>
+
+}
+
+class ChatAdapter {
+    - loginUser: User
+    - messages: List<Message>
+    - timeStampStr: String
+    - OUTGOING: int = 2 {static}
+    - INCOMING: int = 1 {static}
+
+    + ChatAdapter(messages: List<Message>)
+    + ChatAdapter()
+    + onCreateViewHolder(parent: ViewGroup, viewType: int): ChatViewHolder
+    + onBindViewHolder(holder: ChatViewHolder, position: int): void
+    + getItemCount(): int
+    + getItemViewType(position: int): int
+    + setChatMessages(messages: List<Message>): void
+    + addMessage(message: Message): void
+    + deleteMessage(position: int): void
+
+}
+ChatAdapter --> User: uses
+ChatAdapter --> Message: uses
+
+
+ChatActivity --> ChatAdapter: uses
+ChatActivity --> Message: uses
+
+class ContactsActivity  {
+
+    - adapter: ContactsAdapter
+    - recyclerView: RecyclerView
+    - latestTime: String
+    - databaseReference: DatabaseReference
+    - loginUser: User = LoginFragment.loginUser
+
+    + onCreate(savedInstanceState: Bundle): void
+
+}
+ContactsActivity --> ContactsAdapter: uses
+
+ContactsActivity --> DatabaseReference: uses
+ContactsActivity --> LoginFragment: uses
+ContactsActivity --> Message: uses
+
+class GoodDetailsActivity{
+        - uID: String
+        + onCreate(savedInstanceState: Bundle): void
+        }
+
+    class AVLTreeToJSONConverter {
+            + convertTreeToJSON(AVLUserTree, AVLCateTree): JSONObject
+            + writeJSONToFile(JSONObject, Context): void
+            + buildUsersJSON(AVLUserTree): JSONObject
+            + buildUserJSON(User): JSONObject
+            + buildGoodsArray(List<Good>): JSONArray
+            + buildGoodJSON(Good): JSONObject
+            + buildCartsArray(List<Cart>): JSONArray
+            + buildGoodsJSON(AVLCateTree): JSONObject
+            - getAllUserNodes(AVLUserNode, List<AVLUserNode>): List<AVLUserNode>
+        }
+
+        class AVLUserNode extends AVLNode {
+            +value: User
+            +leftN: AVLUserNode
+            +rightN: AVLUserNode
+            +search(User): AVLUserNode
+            +searchByID(String): AVLUserNode
+            +searchParent(User): AVLUserNode
+            +getLHeight(): int
+            +getRHeight(): int
+            +getHeight(): int
+            +leftRotate(): void
+            +rightRotate(): void
+            +add(AVLUserNode): void
+        }
+
+        AVLUserNode o--> User : contains
+
+class AVLNode<T> {
+    + value: T
+    + leftN: AVLNode<T>
+    + rightN: AVLNode<T>
+    + AVLNode(T value)
+    + search(T val): AVLNode
+    + searchParent(T val): AVLNode
+    + midOrder(): void
+    + getLHeight(): int
+    + getRHeight(): int
+    + getHeight(): int
+    + leftRotate(): void
+    + rightRotate(): void
+    + add(AVLNode<T> node): void
+}
+
+        class AVLCateNode extends AVLNode {
+            +value: String
+            -leftN: AVLCateNode
+            -rightN: AVLCateNode
+            +goodList: List<Good>
+            +search(String): AVLCateNode
+            +searchParent(String): AVLCateNode
+            +midOrder(): void
+            +getLHeight(): int
+            +getRHeight(): int
+            +getHeight(): int
+            +leftRotate(): void
+            +rightRotate(): void
+            +add(AVLCateNode): void
+            +toString(): String
+        }
+
+        AVLCateNode o--> Good : contains multiple
+
+        AVLTreeToJSONConverter --> AVLUserTree : uses
+        AVLTreeToJSONConverter --> AVLUserNode : uses
+        AVLTreeToJSONConverter --> AVLCateTree : uses
+        AVLTreeToJSONConverter --> AVLCateNode : uses
+        AVLTreeToJSONConverter --> User : uses
+        AVLTreeToJSONConverter --> Good : uses
+        AVLTreeToJSONConverter --> Cart : uses
+        AVLCateTree --> AVLCateNode : contains
+        AVLUserTree --> AVLUserNode : contains
+        AVLUserNode --> User : references
+GoodDetailsActivity --> AVLTreeToJSONConverter : uses
+GoodDetailsActivity --> AVLCateTree : uses
+GoodDetailsActivity --> AVLUserTree : uses
+GoodDetailsActivity --> MyApplication : accesses
+GoodDetailsActivity --> ChatActivity : navigates to
+
+class RegisterActivity {
+    - email: EditText
+    - password: EditText
+    - user: User
+
+    + onCreate(savedInstanceState: Bundle): void
+    + signup(): void
+    + upload(): void
+    + goToNextActivity(): void
+}
+
+RegisterActivity --> User: Uses
+RegisterActivity --> DatabaseController: Uses
+
+
+
+class SearchActivity {
+    - tokenizer : SearchTokenizer
+    - parser : Parser
+    - queryAttributes : ArrayList<Exp>
+    - goodSourceList : List<Good>
+    - searchResultList : List<Good>
+    - recyclerView : RecyclerView
+    - emptyDataLayout : LinearLayout
+    - adapter : MyAdapter
+    + static goodAVLtree : AVLCateTree
+    + onCreate(savedInstanceState : Bundle) : void
+    - sortGoodsByPriceDescending() : void
+    - sortGoodsByPrice() : void
+    - filterGoodsByPriceRange(minPrice : double, maxPrice : double) : void
+    - executeQuery() : List<Good>
+    - updateSearchGoods(results : List<Good>) : void
+}
+
+class SearchTokenizer implements Tokenizer {
+    - buffer : String
+    - index : int
+    - currentToken : Token
+    - TOKEN_NAME : String {static}
+    - TOKEN_PRICE : String {static}
+    - TOKEN_CLICKS : String {static}
+    - TOKEN_BRAND : String {static}
+    - TOKEN_CATEGORY : String {static}
+    - TOKEN_LOCATION : String {static}
+    - whiteSpaces : char[] {static}
+    - validComparator : String[]
+    + SearchTokenizer(buffer : String)
+    + hasNext() : boolean
+    + current() : Token
+    + next() : void
+    + getBuffer() : String
+    + getIndex() : int
+    + getCurrentToken() : Token
+    + isANumber(str : String) : boolean {static}
+    - validateToken(token : Token) : void
+}
+
+class Tokenizer {
+    + hasNext() : boolean
+    + current() : Token
+    + next() : void
+}
+class Token {
+    - token : String
+    - type : Type
+    + Token(token : String, type : Type)
+    + getToken() : String
+    + getType() : Type
+    + toString() : String
+    + equals(o : Object) : boolean
+    + hashCode() : int
+
+    enum Type {
+        PRICE
+        CLICKS
+        CATEGORY
+        BRAND
+        NAME
+        LOCATION
+    }
+
+    Token --> Type : Has a
+}
+SearchTokenizer --> Token : Uses
+class Parser {
+
+    - goodAVLtree : AVLCateTree {static}
+    - engine : JexlEngine
+    - context : JexlContext
+    - searchTokenizer : SearchTokenizer
+    - queryAttributes : ArrayList<Exp>
+    - goodSourceList : List<Good>
+    - searchResultList : ArrayList<Good>
+
+    +Parser(searchTokenizer : SearchTokenizer)
+    +parseExp() : void
+    +getQueryAttributes() : ArrayList<Exp>
+
+}
+Parser --> SearchTokenizer : Uses
+Parser --> Exp : Uses
+Parser --> CategoryExp : Uses
+Parser --> BrandExp : Uses
+Parser --> PriceExp : Uses
+Parser --> NameExp : Uses
+Parser --> ClicksExp : Uses
+class Exp {
+    +abstract evaluate(context: JexlContext): boolean
+}
+
+class ClicksExp extends Exp {
+    -comparator: String
+    -clicks: String
+    +ClicksExp(clicks: String)
+    +evaluate(context: JexlContext): boolean
+    +getComparator(): String
+    +getClicks(): String
+}
+
+class PriceExp extends Exp {
+    -comparator: String
+    -price: String
+    +PriceExp(price: String)
+    +evaluate(context: JexlContext): boolean
+    +getComparator(): String
+    +getPrice(): String
+}
+
+class CategoryExp extends Exp {
+    -category: String
+    +CategoryExp(category: String)
+    +evaluate(context: JexlContext): boolean
+    +getCategory(): String
+}
+
+class BrandExp extends Exp {
+    -brand: String
+    +BrandExp(brand: String)
+    +evaluate(context: JexlContext): boolean
+    +getBrand(): String
+}
+
+class NameExp extends Exp {
+    -name: String
+    +NameExp(name: String)
+    +evaluate(context: JexlContext): boolean
+    +getName(): String
+}
+
+SearchActivity *-- SearchTokenizer
+SearchActivity *-- Parser
+SearchActivity *-- Exp
+SearchActivity *-- Good
+SearchActivity *-- MyAdapter
+SearchActivity *-- AVLCateTree
+SearchActivity *-- AVLCateNode
+ClicksExp --|> Exp
+PriceExp --|> Exp
+CategoryExp --|> Exp
+BrandExp --|> Exp
+NameExp --|> Exp
+
+
+@enduml
+@enduml
+
+

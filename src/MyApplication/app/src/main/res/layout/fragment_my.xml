@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="#ffffff"
+    tools:context=".Fragment.MyFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp">
+
+            <ImageView
+                android:id="@+id/profileImageView"
+                android:layout_width="96dp"
+                android:layout_height="96dp"
+                android:src="@drawable/img"/>
+
+
+            <TextView
+                android:id="@+id/emailTextView"
+                android:layout_width="249dp"
+                android:layout_height="74dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="20dp"
+                android:layout_toRightOf="@id/profileImageView"
+                android:text="user@example.com"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+        </RelativeLayout>
+
+        <View
+            android:id="@+id/view"
+            android:layout_width="match_parent"
+            android:layout_height="12dp"
+            android:background="#DAD4E6" />
+
+        <Button
+            android:id="@+id/cart"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:drawableLeft="@drawable/twotone_shopping_cart_24"
+            android:drawableRight="@drawable/twotone_chevron_right_24"
+            android:text="Cart"
+            android:textAlignment="textStart"
+            android:textColor="#000000" />
+
+        <Button
+            android:id="@+id/goods"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:drawableLeft="@drawable/twotone_grade_24"
+            android:drawableRight="@drawable/twotone_chevron_right_24"
+            android:text="Lauch Goods"
+            android:textAlignment="textStart"
+            android:textColor="#000000" />
+
+        <Button
+            android:id="@+id/add_good"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:drawableLeft="@drawable/twotone_dashboard_customize_24"
+            android:drawableRight="@drawable/twotone_chevron_right_24"
+            android:text="Add Goods"
+            android:textAlignment="textStart"
+            android:textColor="#000000" />
+
+        <View
+            android:id="@+id/view2"
+            android:layout_width="match_parent"
+            android:layout_height="250dp" />
+
+        <Button
+            android:id="@+id/log_out"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Log out" />
+    </LinearLayout>
+</FrameLayout>
